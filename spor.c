@@ -124,7 +124,6 @@ int dump_db(char* file)
 int restore_db(char* file)
 {
 	int error = 0;
-	int errors = 0;
 	char buff[MAXLINE];
 	DB_RECORD db;
 
@@ -151,14 +150,13 @@ int restore_db(char* file)
 
 			fprintf(stderr, "\n");
 		}
-		errors += error;
 	}
 
-	if (verbose && errors)
+	if (verbose && error)
 		fprintf(stderr,
-			"Recovery process failed to %d files.\n", errors);
+			"Recovery process failed to %d files.\n", error);
 
 	fclose(dbfile);
-	return (errors);
+	return error;
 }
 
