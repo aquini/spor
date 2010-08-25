@@ -1,9 +1,6 @@
-/* 
- * spor-ftw.c - File Tree Walking Interface for spor.c 
- * 
+/*
+ * spor-ftw.c - File Tree Walking Interface for spor.c
  * (c) Copyright, 2009 By Rafael Aquini, <aquini@linux.com>
- *
- * $Id: spor-ftw.c 18 2010-03-24 23:45:34Z raaquini $ 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +38,7 @@ void ftw_store(const char *wdir, int nfds)
 	int flags = FTW_PHYS;
 	if (nftw(wdir, process, nfds, flags) != 0) {
 		if (verbose)
-			fprintf(stderr, "%s - %s: stopped early!\n", 
+			fprintf(stderr, "%s - %s: stopped early!\n",
 							program_name, wdir);
 	}
 }
@@ -50,7 +47,7 @@ int process(const char *file, const struct stat *sb, int flag, struct FTW *s)
 {
 	int retval = 0;
 	const char *name = file;
-	
+
 	switch (flag) {
 	case FTW_F:
 	case FTW_D:

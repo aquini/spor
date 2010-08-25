@@ -2,8 +2,6 @@
  * spor.c - Store Permissions and Ownership Recursively
  * (c) Copyright, 2009 By Rafael Aquini, <aquini@linux.com>
  *
- * $Id: spor.c 18 2010-03-24 23:45:34Z raaquini $
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -45,8 +43,8 @@ int main(int argc, char *argv[])
 		case 's':
 		case 'r':
 		case 'd':
-			/* User specified -s or --store   || 
- 			   User specified -r or --restore || 
+			/* User specified -s or --store   ||
+			   User specified -r or --restore ||
 			   User specified -d or --dump */
 			mode = opt;
 			file = optarg;
@@ -66,7 +64,7 @@ int main(int argc, char *argv[])
 			abort();
 		}
 	}
-	
+
 	if (optind == argc)
 		print_usage();
 
@@ -83,18 +81,18 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "Working at %s\n", argv[optind]);
 
 		ftw_store(argv[optind], nfds);
-		fclose(dbfile);			
-		} 
+		fclose(dbfile);
+		}
 		break;
 	case 'r':
 		return(restore_db(file));
-		break;	
+		break;
 	case 'd':
 		return(dump_db(file));
 		break;
 	default:
 		break;
-	}		
+	}
 	return 0;
 }
 
@@ -108,18 +106,18 @@ int dump_db(char* file)
 		fprintf(stderr,"ERROR: Impossible to read file %s\n",file);
 		return -1;
 	}
-   
+
 	fprintf(stdout,"--[ Store Permissions & Ownership Recursively ]--\n");
 	fprintf(stdout,"Perm.\tOwner  \tFile path\n");
 	fprintf(stdout,"=====\t=======\t=========\n");
 	while(fgets(buff, MAXLINE, dbfile) != NULL) {
-		sscanf(buff,"%d %d %d %s", 
+		sscanf(buff,"%d %d %d %s",
 					&db.mode, &db.uid, &db.gid, db.fpath);
 		fprintf(stdout,"%d\t%d:%d\t%s\n",
 					db.mode, db.uid, db.gid, db.fpath);
 	}
 	fprintf(stdout,"=====\t=======\t=========\n");
-	fclose(dbfile);			
+	fclose(dbfile);
 	return 0;
 }
 
@@ -135,29 +133,29 @@ int restore_db(char* file)
 		fprintf(stderr, "ERROR: Impossible to read file %s\n", file);
 		return -1;
 	}
-   
+
 	while(fgets(buff, MAXLINE, dbfile) != NULL) {
 		error = 0;
 		sscanf(buff,"%d %d %d %s",
 					&db.mode, &db.uid, &db.gid, db.fpath);
 		if (verbose)
 			fprintf(stderr,"RECOVERING [%s] ", db.fpath);
-					
-		if ((chmod(db.fpath, (db.mode & 07777)) != 0) || 
+
+		if ((chmod(db.fpath, (db.mode & 07777)) != 0) ||
 					(chown(db.fpath, db.uid, db.gid) != 0))
 			error++;
-				
+
 		if (verbose) {
 			if (error)
 				fprintf(stderr, "FAILED!");
 
-			fprintf(stderr, "\n");		
+			fprintf(stderr, "\n");
 		}
 		errors += error;
 	}
 
 	if (verbose && errors)
-		fprintf(stderr, 
+		fprintf(stderr,
 			"Recovery process failed to %d files.\n", errors);
 
 	fclose(dbfile);

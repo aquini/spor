@@ -2,8 +2,6 @@
  * spor.h - commom definition file for spor.c
  * (c) Copyright, 2009 By Rafael Aquini, <aquini@linux.com>
  *
- * $Id: spor.h 18 2010-03-24 23:45:34Z raaquini $ 
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -79,3 +77,4 @@ extern FILE *dbfile;
 int ftw_store(const char *wdir, int nfds);
 int dump_db(char* file);
 int restore_db(char* file);
+
