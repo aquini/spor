@@ -26,6 +26,8 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <grp.h>
+#include <pwd.h>
 
 #define SPARE_FDS 50
 #define MAXLINE (PATH_MAX + (sizeof(unsigned long int) * 3) + 4)
@@ -77,4 +79,5 @@ extern FILE *dbfile;
 int ftw_store(const char *wdir, int nfds);
 int dump_db(char* file);
 int restore_db(char* file);
+int check_chown(char *path, uid_t uid, gid_t gid);
 

@@ -31,6 +31,7 @@ static void print_usage(void)
 int main(int argc, char *argv[])
 {
 	int opt, mode, nfds;
+	int retval = 0;
 	char *file;
 
 	mode = 0;
@@ -85,15 +86,15 @@ int main(int argc, char *argv[])
 		}
 		break;
 	case 'r':
-		return(restore_db(file));
+		retval = restore_db(file);
 		break;
 	case 'd':
-		return(dump_db(file));
+		retval = dump_db(file);
 		break;
 	default:
 		break;
 	}
-	return 0;
+	return retval;
 }
 
 int dump_db(char* file)
@@ -134,22 +135,21 @@ int restore_db(char* file)
 	}
 
 	while(fgets(buff, MAXLINE, dbfile) != NULL) {
-		error = 0;
 		sscanf(buff,"%d %d %d %s",
 					&db.mode, &db.uid, &db.gid, db.fpath);
 		if (verbose)
 			fprintf(stderr,"RECOVERING [%s] ", db.fpath);
 
 		if ((chmod(db.fpath, (db.mode & 07777)) != 0) ||
-					(chown(db.fpath, db.uid, db.gid) != 0))
+				(check_chown(db.fpath, db.uid, db.gid) != 0)) {
 			error++;
 
-		if (verbose) {
-			if (error)
+			if (verbose)
 				fprintf(stderr, "FAILED!");
-
-			fprintf(stderr, "\n");
 		}
+
+		if (verbose)
+			fprintf(stderr, "\n");
 	}
 
 	if (verbose && error)
@@ -157,6 +157,36 @@ int restore_db(char* file)
 			"Recovery process failed to %d files.\n", error);
 
 	fclose(dbfile);
+	return error;
+}
+
+int check_chown(char *path, uid_t uid, gid_t gid)
+{
+	struct passwd pwd, *presult;
+	struct group grp, *gresult;
+	char *buf;
+	size_t bufsize;
+	int u, g, error = 0;
+
+	bufsize = sysconf(_SC_GETPW_R_SIZE_MAX);
+	if (bufsize == -1)
+		bufsize = 16384;
+
+	buf = malloc(bufsize);
+	if (buf == NULL) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+
+	u = getpwuid_r(uid, &pwd, buf, bufsize, &presult);
+	g = getgrgid_r(gid, &grp, buf, bufsize, &gresult);
+
+	if (presult != NULL && gresult != NULL)
+		error = chown(path, uid, gid);
+	else
+		++error;
+
+	free(buf);
 	return error;
 }
 
