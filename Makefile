@@ -1,5 +1,5 @@
 # Default C compiler options.
-CFLAGS 		= -g -Wall
+CFLAGS 		= -O2 -g -Wall
 
 # C source files.
 SOURCES 	= spor.c spor-ftw.c 
