@@ -2,7 +2,7 @@ Name:      spor
 Group:     Applications/System 
 Summary:   Store file modes (permission/ownership) recursively 
 Version:   1.0
-Release:   0%{?dist}
+Release:   1%{?dist}
 License:   GPLv3+
 URL:       http://code.google.com/p/spor
 Source0:   http://spor.googlecode.com/files/spor-%{version}.tar.bz2 
@@ -37,6 +37,6 @@ of a given directory.
 %{_mandir}/man1/%{name}.1*
 
 %changelog
-* Sun Nov 07 2010 Rafael Azenha Aquini <aquini at linux dot com> - 1.0-0
+* Mon Nov 08 2010 Rafael Azenha Aquini <aquini at linux dot com> - 1.0-1
 - initial packaging.
 
