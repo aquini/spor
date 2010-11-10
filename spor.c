@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 	verbose = 0;
 	program_name = argv[0];
 	dbfile = NULL;
+	file = NULL;
 
 	while ((opt=getopt_long(argc, argv, s_opts, l_opts, NULL)) != -1) {
 		switch (opt) {

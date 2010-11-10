@@ -1,0 +1,31 @@
+NAME
+  spor - store file modes (permission/ownership) recursively
+
+SYNOPSIS
+  spor [-hv] [-s file] [-r file] [-d file] <dirpath>
+
+DESCRIPTION
+  spor store file modes (permission/ownership) recursively 
+
+  It recursively walks into a given directory, storing 
+  file mode & ownership information in a flat-file database 
+  for future retrievals. It was firstly intended to use 
+  with backup/rcs scripts.
+
+OPTIONS
+  -h  --help            Display a help text.
+  -d  --dump <file>     List the <file> content.
+  -r  --restore <file>  Retore file mode info from <file>.
+  -s  --store <file>    Store file mode info to <file>.
+  -v  --verbose         Do all operations verbosely.
+
+EXAMPLE
+  - Store all /foodir information to /tmp/foo.spor
+
+      $ spor --store /tmp/foo.spor /foodir
+
+  - Retrieve all /foodir information from /tmp/foo.spor
+
+      $ spor --restore /tmp/foo.spor /foodir
+AUTHOR
+  Rafael Aquini <aquini@fedorapeople.org>
